@@ -9,11 +9,12 @@
 #include <stdlib.h>
 using namespace std;
 
-const int NUM_threads = 4;
-const int a = 1; // нижний предел интеграла
+const int NUM_threads = 4; // количество потоков
+const int a = 0; // нижний предел интеграла
 const int b = 4; // верхний предел интеграла
-const int c = 3; // количество отрезков
-int x;
+const int c = 100000; // количество отрезков
+double x;
+int i;
 
 // функция, возвращающая exp^(-x^2)
 double f (double x)
@@ -24,23 +25,24 @@ double f (double x)
 void main ()
 {
 	long double clockStart, clockStop;
-	double s;
-	double d = abs(b-a)/c; //  длина отрезка
+	double s = 0;
+	double d = abs(b - a) / (double) c; //  длина отрезка
 
 	clockStart = omp_get_wtime();
 
-	#pragma omp parallel for shared (s, x, d, b) num_threads (NUM_threads)
-	for (x = 1; x < b; x += d)
+	#pragma omp parallel for shared(s, a, d, i) private(x) num_threads(NUM_threads)
+	for (i = 1; i < c; i++)
 	{
+		x = a + i * d;
 		#pragma omp atomic 
 			s += (d * f(x)); // площадь
 	}
 
 	clockStop = omp_get_wtime();
 
-	cout.precision(3);
-	cout<<"Square s = "<<s<<endl;
-	cout<<"Seconds: "<<(clockStop - clockStart)<<endl;
+	cout << "Square s = " << s << endl;
+	cout << "Seconds: " << (clockStop - clockStart) << endl;
+	getchar();
 }
 
 
