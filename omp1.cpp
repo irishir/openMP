@@ -31,7 +31,7 @@ void main ()
 	clockStart = omp_get_wtime();
 
 	#pragma omp parallel for shared(s, a, d, i) private(x) num_threads(NUM_threads)
-	for (i = 1; i < c; i++)
+	for (i = 1; i <= c; i++)
 	{
 		x = a + i * d;
 		#pragma omp atomic 
