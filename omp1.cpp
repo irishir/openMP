@@ -16,7 +16,7 @@ const int c = 100000; // количество отрезков
 double x;
 int i;
 
-// функция, возвращающая exp^(-x^2)
+// функция, возвращающая exp(-x^2)
 double f (double x)
 {
 	return exp(-1 * x * x);
